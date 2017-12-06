@@ -12,7 +12,9 @@ Big Data Problem
 3. To run the servers, run each of the following lines in different terminals
 
 `mongod --replSet replicate --dbpath mongo1 --port 27017 --rest`
+
 `mongod --replSet replicate --dbpath mongo1 --port 27018 --rest`
+
 `mongod --replSet replicate --dbpath mongo1 --port 27019 --rest`
 
 4. Add a config file to one of the mongo instances, namely the one connected to port 27017
@@ -48,20 +50,24 @@ Big Data Problem
 
 1.  Load the dataset into the mongo instance using the following code.
 
-  `mongoimport --db tweetfinal --collection tweetfinal --type json --file ADMUSanggu.json -h localhost:27017
-  mongoimport --db tweetfinal --collection tweetfinal --type json --file GetBlued.json -h localhost:27017
-  mongoimport --db tweetfinal --collection tweetfinal --type json --file ateneodemanilau.json -h localhost:27017
-  mongoimport --db tweetfinal --collection tweetfinal --type json --file TheGUIDON.json -h localhost:27017
-  mongoimport --db tweetfinal --collection tweetfinal --type json --file TheGUIDONSports.json -h localhost:27017`
+  `mongoimport --db tweetfinal --collection tweetfinal --type json --file ADMUSanggu.json -h localhost:27017`
+  
+  `mongoimport --db tweetfinal --collection tweetfinal --type json --file GetBlued.json -h localhost:27017`
+  
+  `mongoimport --db tweetfinal --collection tweetfinal --type json --file ateneodemanilau.json -h localhost:27017`
+  
+  `mongoimport --db tweetfinal --collection tweetfinal --type json --file TheGUIDON.json -h localhost:27017`
+  
+  `mongoimport --db tweetfinal --collection tweetfinal --type json --file TheGUIDONSports.json -h localhost:27017`
 
 2. To find out if the files are loaded succesfully into the database, we run the following commands
 
 
-` > show dbs`
+- ` > show dbs`
 
-` > use tweetfinal`
+- ` > use tweetfinal`
 
-` >db.tweetfinal>.find().pretty()`
+- ` >db.tweetfinal>.find().pretty()`
 
 3.  To verify that the data has been replicated succesfully, run the following commands.
 
@@ -85,15 +91,20 @@ Big Data Problem
 
 ## How to execute and run the MapReduce Functions
 
-Map function
+In the same mongo instance, we enter the following functions to allow us to perform MapReduce on our Data
+
+### Map function
+
 `map = function() {
 	emit(this.created_at.charAt(11) + this.created_at.charAt(12), this.favorite_count);
 }`
 
-Reduce function
+### Reduce function
+
 `reduce = function(key, values) {return Array.avg(values)}`
 
-Run our mapReduce
+### Runnin our MapReduce function
+
 `results = db.runCommand({
 mapReduce: 'tweetfinal',
 map: map,
@@ -101,7 +112,7 @@ reduce: reduce,
 query: {retweeted: false},
 out: 'tweetfinal.answer'});`
 
-Print out the results
+### Print out the results
 db.tweetfinal.answer.find().pretty();`
 
 ## How to shard the MapReduce Functions
