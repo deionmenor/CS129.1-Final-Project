@@ -20,6 +20,7 @@ Big Data Problem
 4. Add a config file to one of the mongo instances, namely the one connected to port 27017
 
 `mongo localhost:27017`
+
 `var config = {
   "\_id": "replicate",
   "version" : 1,
@@ -41,6 +42,7 @@ Big Data Problem
     }
   ]
 }`
+
 5. Initialize the replica set using the config variable
 
 `rs.initiate(config)`
@@ -63,29 +65,29 @@ Big Data Problem
 2. To find out if the files are loaded succesfully into the database, we run the following commands
 
 
-- ` > show dbs`
+`show dbs`
 
-- ` > use tweetfinal`
+`use tweetfinal`
 
-- ` >db.tweetfinal>.find().pretty()`
+`db.tweetfinal>.find().pretty()`
 
 3.  To verify that the data has been replicated succesfully, run the following commands.
 
 - Login to another mongo instance
 
-`$ mongo localhost:27018`
+`mongo localhost:27018`
 
 - Once logged-in set the current terminal as a slave
 
-`> rs.slaveOk()`
+`rs.slaveOk()`
 
 - Then use the loaded database
 
-`> use tweetfinal`
+`use tweetfinal`
 
 - Check if the data is consistent between both mongo instances
 
-`> db.tweetfinal.find().pretty()`
+`db.tweetfinal.find().pretty()`
 
 
 
@@ -93,17 +95,17 @@ Big Data Problem
 
 In the same mongo instance, we enter the following functions to allow us to perform MapReduce on our Data
 
-### Map function
+#### Map function
 
 `map = function() {
 	emit(this.created_at.charAt(11) + this.created_at.charAt(12), this.favorite_count);
 }`
 
-### Reduce function
+#### Reduce function
 
 `reduce = function(key, values) {return Array.avg(values)}`
 
-### Running our MapReduce function
+#### Running our MapReduce function
 
 `results = db.runCommand({
 mapReduce: 'tweetfinal',
@@ -112,7 +114,7 @@ reduce: reduce,
 query: {retweeted: false},
 out: 'tweetfinal.answer'});`
 
-### Print out the results
+#### Print out the results
 `db.tweetfinal.answer.find().pretty();`
 
 ## Sharding
@@ -190,7 +192,9 @@ out: 'tweetfinal.answer'});`
 - Type `use tweetfinal` and enter the following commands to create an empty collection `tweets` to be used for hashed sharding
 
 `db.createCollection('tweets')`
+
 `db.tweets.createIndex({id:1}, {unique: true})`
+
 `sh.shardCollection("tweetfinal.tweets", { _id : "hashed" } )`
 
 ### Importing of data
@@ -198,9 +202,13 @@ out: 'tweetfinal.answer'});`
 - Exit the shell and run the following commands to import our 5 JSON files
 
 `mongoimport --db tweetfinal --collection tweets  --type json --host "127.0.0.1:27014" --file "ADMUSanggu.json"`
+
 `mongoimport --db tweetfinal --collection tweets  --type json --host "127.0.0.1:27014" --file "ateneodemanilau.json"`
+
 `mongoimport --db tweetfinal --collection tweets  --type json --host "127.0.0.1:27014" --file "TheGUIDON.json"`
+
 `mongoimport --db tweetfinal --collection tweets  --type json --host "127.0.0.1:27014" --file "TheGUIDONSports.json"`
+
 `mongoimport --db tweetfinal --collection tweets  --type json --host "127.0.0.1:27014" --file "GetBlued.json"`
 
 - MapReduce functions can be tested out similarly to the steps above for replicate sets
