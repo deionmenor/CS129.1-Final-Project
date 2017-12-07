@@ -52,15 +52,15 @@ Big Data Problem
 
 1.  Load the dataset into the mongo instance using the following code.
 
-  `mongoimport --db tweetfinal --collection tweetfinal --type json --file ADMUSanggu.json -h localhost:27017`
+  `mongoimport --db tweetfinal --collection tweets --type json --file ADMUSanggu.json -h localhost:27017`
   
-  `mongoimport --db tweetfinal --collection tweetfinal --type json --file GetBlued.json -h localhost:27017`
+  `mongoimport --db tweetfinal --collection tweets --type json --file GetBlued.json -h localhost:27017`
   
-  `mongoimport --db tweetfinal --collection tweetfinal --type json --file ateneodemanilau.json -h localhost:27017`
+  `mongoimport --db tweetfinal --collection tweets --type json --file ateneodemanilau.json -h localhost:27017`
   
-  `mongoimport --db tweetfinal --collection tweetfinal --type json --file TheGUIDON.json -h localhost:27017`
+  `mongoimport --db tweetfinal --collection tweets --type json --file TheGUIDON.json -h localhost:27017`
   
-  `mongoimport --db tweetfinal --collection tweetfinal --type json --file TheGUIDONSports.json -h localhost:27017`
+  `mongoimport --db tweetfinal --collection tweets --type json --file TheGUIDONSports.json -h localhost:27017`
 
 2. To find out if the files are loaded succesfully into the database, we run the following commands
 
@@ -69,7 +69,7 @@ Big Data Problem
 
 `use tweetfinal`
 
-`db.tweetfinal>.find().pretty()`
+`db.tweets.find().pretty()`
 
 3.  To verify that the data has been replicated succesfully, run the following commands.
 
@@ -87,7 +87,7 @@ Big Data Problem
 
 - Check if the data is consistent between both mongo instances
 
-`db.tweetfinal.find().pretty()`
+`db.tweets.find().pretty()`
 
 
 
