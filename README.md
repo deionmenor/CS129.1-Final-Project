@@ -108,14 +108,14 @@ In the same mongo instance, we enter the following functions to allow us to perf
 #### Running our MapReduce function
 
 `results = db.runCommand({
-mapReduce: 'tweetfinal',
+mapReduce: 'tweets',
 map: map,
 reduce: reduce,
 query: {retweeted: false},
-out: 'tweetfinal.answer'});`
+out: 'tweets.answer'});`
 
 #### Print out the results
-`db.tweetfinal.answer.find().pretty();`
+`db.tweets.answer.find().pretty();`
 
 ## Sharding
 
@@ -137,7 +137,7 @@ out: 'tweetfinal.answer'});`
 
 `mongod --config config.yml --bind_ip 127.0.0.1 --port 27011 --dbpath config2`
 
-- In another terminal, enter the command `mongo --host 127.0.0.1 --port 27011` to connect to one of the config servers
+- In another terminal, enter the command `mongo --host 127.0.0.1 --port 27010` to connect to one of the config servers
 
 - Initiate the replica set by running the following into the mongo shell
 
@@ -190,10 +190,6 @@ out: 'tweetfinal.answer'});`
 ### Create a sharded collection
 
 - Type `use tweetfinal` and enter the following commands to create an empty collection `tweets` to be used for hashed sharding
-
-`db.createCollection('tweets')`
-
-`db.tweets.createIndex({id:1}, {unique: true})`
 
 `sh.shardCollection("tweetfinal.tweets", { _id : "hashed" } )`
 
