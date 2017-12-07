@@ -22,7 +22,27 @@ Big Data Problem
 `mongo localhost:27017`
 
 
-`var config = { "\_id": "replicate", "version" : 1, "members" : [ { "\_id" : 0, "host" : "localhost:27017", "priority" : 2 }, { "\_id" : 1, "host" : "localhost:27018", "priority" : 1}, { "\_id" : 2, "host" : "localhost:27019", "priority" : 1} ] }`
+``` javascript
+var config = 
+	{ 
+	"\_id": "replicate",
+	"version" : 1,
+	"members" : [ 
+		{ 
+			"\_id" : 0, 
+			"host" : "localhost:27017", 
+			"priority" : 2 }, 
+		{ 
+			"\_id" : 1,
+			"host" : "localhost:27018",
+			"priority" : 1},
+		{ 
+			"\_id" : 2, 
+			"host" : "localhost:27019",
+			"priority" : 1}
+			] 
+	}
+```
 
 
 5. Initialize the replica set using the config variable
@@ -79,22 +99,29 @@ In the same mongo instance, we enter the following functions to allow us to perf
 
 #### Map function
 
-`map = function() {
+``` javascript
+map = function() {
 	emit(this.created_at.charAt(11) + this.created_at.charAt(12), this.favorite_count);
-}`
+}
+```
 
 #### Reduce function
 
-`reduce = function(key, values) {return Array.avg(values)}`
+``` javascript
+reduce = function(key, values) {return Array.avg(values)}
+```
 
 #### Running our MapReduce function
 
-`results = db.runCommand({
+
+``` javascript
+results = db.runCommand({
 mapReduce: 'tweets',
 map: map,
 reduce: reduce,
 query: {retweeted: false},
-out: 'tweets.answer'});`
+out: 'tweets.answer'});
+```
 
 #### Print out the results
 `db.tweets.answer.find().pretty();`
@@ -123,14 +150,16 @@ out: 'tweets.answer'});`
 
 - Initiate the replica set by running the following into the mongo shell
 
-`rs.initiate({
+``` javascript
+rs.initiate({
 	_id: "config",
 	configsvr: true,
 	members: [
 		{ _id: 0, host: "127.0.0.1:27010", priority: 1 },
 		{ _id: 1, host: "127.0.0.1:27011", priority: 0 }
 	]
-})`
+})
+```
 
 ### Setting up shard replica set
 
@@ -144,13 +173,15 @@ out: 'tweets.answer'});`
 
 - Initiate the shard replica set by running the following code in the shell
 
-`rs.initiate({
+``` javascript
+rs.initiate({
 	_id: 'shard',
 	members: [
 		{ _id: 0, host: "127.0.0.1:27012", priority: 1 },
 		{ _id: 1, host: "127.0.0.1:27013", priority: 0 }
 	]
-})`
+})
+```
 
 ### Setting up mongos 
 
