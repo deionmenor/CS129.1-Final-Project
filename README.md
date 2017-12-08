@@ -13,9 +13,9 @@ Big Data Problem
 
 `mongod --replSet replicate --dbpath mongo1 --port 27017 --rest`
 
-`mongod --replSet replicate --dbpath mongo1 --port 27018 --rest`
+`mongod --replSet replicate --dbpath mongo2 --port 27018 --rest`
 
-`mongod --replSet replicate --dbpath mongo1 --port 27019 --rest`
+`mongod --replSet replicate --dbpath mongo3 --port 27019 --rest`
 
 4. Add a config file to one of the mongo instances, namely the one connected to port 27017
 
