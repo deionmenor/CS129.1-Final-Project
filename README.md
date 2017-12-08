@@ -100,9 +100,10 @@ In the same mongo instance, we enter the following functions to allow us to perf
 #### Map function
 
 ``` javascript
-map = function() {
-	emit(this.created_at.charAt(11) + this.created_at.charAt(12), this.favorite_count);
+mapA = function() {
+	emit(this.user.screen_name + ' ' + this.created_at.charAt(11) + this.created_at.charAt(12), this.favorite_count);
 }
+
 ```
 
 #### Reduce function
@@ -116,17 +117,40 @@ reduce = function(key, values) {return Array.avg(values)}
 
 ``` javascript
 results = db.runCommand({
-mapReduce: 'tweets',
-map: map,
-reduce: reduce,
-query: {retweeted: false},
-out: 'tweets.answer'});
+  mapReduce: 'tweets',
+  map: mapA,
+  reduce: reduceA,
+  out: 'tweets.a'
+});
 ```
 
 #### Print out the results
-`db.tweets.answer.find().pretty();`
+`db.tweets.answer.find().pretty();`	
 
-## Sharding
+## Running another Map Reduce on the results of a previous Map Reduce
+
+The following code uses another Map Reduce that outputs a consolidated average of all 5 twitter accounts.
+
+``` javascript
+
+mapB = function() {
+	emit(this._id.slice(-2),  this.value);
+}
+
+reduceB = function(key, values) {return Array.avg(values)}
+
+results = db.runCommand({
+  mapReduce: 'tweets.a',
+  map: mapB,
+  reduce: reduceB,
+  out: 'tweets.b'
+});
+
+db.tweets.b.find().pretty()
+
+```
+
+# Sharding
 
 - Make another folder called `sharding` with subfolders config1, config2, node1, and node2
 
